@@ -1,0 +1,62 @@
+local Players = game:GetService("Players")
+local CoreGui = game:GetService("CoreGui")
+
+local lp = Players.LocalPlayer
+
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local LeaveBtn = Instance.new("TextButton")
+local UICornerFrame = Instance.new("UICorner")
+local UICornerBtn = Instance.new("UICorner")
+local UIStroke = Instance.new("UIStroke")
+
+ScreenGui.Parent = CoreGui
+ScreenGui.Name = "Leave"
+ScreenGui.ResetOnSpawn = false
+
+MainFrame.Name = "DragFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.Size = UDim2.new(0, 150, 0, 80)
+MainFrame.Position = UDim2.new(1, -170, 0, 60)
+MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+MainFrame.BackgroundTransparency = 0.5
+MainFrame.Active = true
+MainFrame.Draggable = true
+
+UICornerFrame.CornerRadius = UDim.new(0, 12)
+UICornerFrame.Parent = MainFrame
+
+LeaveBtn.Name = "Leave"
+LeaveBtn.Parent = MainFrame
+LeaveBtn.Size = UDim2.new(0, 120, 0, 50)
+LeaveBtn.Position = UDim2.new(0.5, -60, 0.5, -25)
+LeaveBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+LeaveBtn.Text = "Leave"
+LeaveBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+LeaveBtn.Font = Enum.Font.GothamBold
+LeaveBtn.TextSize = 20
+
+UICornerBtn.CornerRadius = UDim.new(0, 10)
+UICornerBtn.Parent = LeaveBtn
+
+UIStroke.Thickness = 2.5
+UIStroke.Color = Color3.fromHex("#43a047")
+UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+UIStroke.Parent = LeaveBtn
+
+LeaveBtn.MouseButton1Click:Connect(function()
+    game:Shutdown()
+end)
+
+MainFrame.Changed:Connect(function()
+    local screenRes = ScreenGui.AbsoluteSize
+    local framePos = MainFrame.AbsolutePosition
+    local frameSize = MainFrame.AbsoluteSize
+    
+    local newX = math.clamp(framePos.X, 0, screenRes.X - frameSize.X)
+    local newY = math.clamp(framePos.Y, 0, screenRes.Y - frameSize.Y)
+    
+    if framePos.X ~= newX or framePos.Y ~= newY then
+        MainFrame.Position = UDim2.new(0, newX, 0, newY)
+    end
+end)
